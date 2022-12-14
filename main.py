@@ -12,6 +12,8 @@ from keras.layers import Input, Conv2D, MaxPooling2D, BatchNormalization
 from keras.layers import UpSampling2D, Dropout, Dense, Flatten
 from keras.optimizers import Adam
 
+from preprocess import dataGen 
+
 
 #Chargement des données
 (X_train, Y_train), (X_test, Y_test) = mnist.load_data()
@@ -51,12 +53,18 @@ model.summary()
 print(np.shape(X_train))
 print(np.shape(Y_train))
 Y_train = keras.utils.to_categorical(Y_train, 10)
+Y_test = keras.utils.to_categorical(Y_test, 10)
+
+X_train=X_train.reshape(60000, 28, 28, 1)
 
 model.compile(loss='categorical_crossentropy', optimizer = Adam(lr=0.0001), metrics=["accuracy"])
 
 
-
-hist = model.fit(X_train, Y_train, steps_per_epoch=1000, epochs=25, verbose=1, validation_split=0.2)
+hist = model.fit_generator(dataGen().flow(X_train, Y_train, batch_size=32),
+                           steps_per_epoch=1000,             # nombre image entrainement / batch_size
+                           epochs=25,                        # nombre de boucle à réaliser sur le jeu de données complet
+                           verbose=1,                        # verbosité
+                           )
 
 final_loss, final_acc = model.evaluate(X_test, Y_test, verbose=0)
 
