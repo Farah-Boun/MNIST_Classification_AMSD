@@ -7,6 +7,8 @@ def select_noise(noise_type = "gaussian"):
             return add_gaussian_noise
       if noise_type=="speckle":
             return add_speckle_noise
+      else:
+            return None
 
 def add_gaussian_noise(img,probability=0.5,mean=0,sigma=10):
       row =  img.shape[0]
