@@ -29,9 +29,9 @@ def parse_args():
 def predict(args): 
     type= int(args.type)
     if(type==0):
-        model = keras.models.load_model("CNN.h5")
+        model = keras.models.load_model("classifier_CNN.h5")
     elif(type==1):
-        model = keras.models.load_model("autoencod.h5")
+        model = keras.models.load_model("classifier_au.h5")
         autoenc=keras.models.load_model("encoder.h5")
     else:
         model = keras.models.load_model(args.model)
@@ -54,7 +54,7 @@ def test(args):
     if(type==0):
         model = keras.models.load_model("CNN.h5")
     elif(type==1):
-        model = keras.models.load_model("autoencod.h5")
+        model = keras.models.load_model("classifier_CNN.h5")
         autoenc=keras.models.load_model("encoder.h5")
     else:
         model = keras.models.load_model(args.model)
