@@ -6,32 +6,12 @@ from keras.layers import Conv2D, MaxPooling2D, BatchNormalization
 from keras.layers import Dropout, Dense, Flatten
 from tqdm import tqdm
 
-from preprocess import dataGen 
+from preprocess import dataGen, add_gaussian_noise, add_speckle_noise
+
 
 
 #Chargement des données
 (X_train, Y_train), (X_test, Y_test) = mnist.load_data()
-
-def add_noise(img,noise_type="gaussian",probability=0.5,mean=0,sigma=10):
-  
-  row,col=img.shape
-  img=img.astype(np.float32)
-  
-  if noise_type=="gaussian":
-    noise=np.random.normal(mean,sigma,img.shape)
-    noise=noise.reshape(row,col)
-    for i in range(row):
-      for j in range(col):
-        if(np.random.uniform(0,1)<probability):
-          img[i,j]=img[i,j]+noise[i,j]
-    return img
-
-  if noise_type=="speckle":
-    noise=np.random.randn(row,col)
-    noise=noise.reshape(row,col)
-    img=img+img*noise
-    
-    return img
 
 
 def get_cnn():
@@ -99,10 +79,10 @@ def train_autoencoder(optimizer, epochs, lr, steps):
   autoencoder = get_autoencoder()
   traindata_gauss=np.zeros((60000,28,28))
   for i in tqdm(range(len(X_train))):
-    traindata_gauss[i]=add_noise(X_train[i],noise_type="gaussian")
+    traindata_gauss[i]=add_gaussian_noise(X_train[i])
   traindata_speckle=np.zeros((60000,28,28))
   for i in tqdm(range(len(X_train))):
-    traindata_speckle[i]=add_noise(X_train[i],noise_type="speckle")
+    traindata_speckle[i]=add_speckle_noise(X_train[i])
   X=np.concatenate((X_train,traindata_gauss, traindata_speckle), axis=0)
   X2=np.concatenate((X_train,X_train, X_train), axis=0)
   X_train2 =X.reshape(60000*3, 28, 28, 1)/255
@@ -175,13 +155,3 @@ def train_cnn(optimizer, epochs, lr, steps):
                             )
   return model
 
-def train(optimizer, epochs, lr, steps, ae_optimizer, ae_epochs, ae_lr, ae_steps):
-  if mt=="cnn":
-    model = train_cnn(optimizer, epochs, lr, steps)
-  elif mt=="encoder":
-    auto = train_autoencoder(ae_optimizer, ae_epochs, ae_lr, ae_steps)
-    model = train_classifier(auto,optimizer, epochs, lr, steps)
-  else:
-    print("error classifier type")
-
-  return model 
