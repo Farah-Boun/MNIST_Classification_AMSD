@@ -10,7 +10,7 @@ def parse_args():
     '''
     Parses the node2vec arguments.
     '''
-    parser = argparse.ArgumentParser(description="Run edge transition matrix.") 
+    parser = argparse.ArgumentParser(description="Parser pour l'exécution de la commande") 
 
     parser.add_argument('--task',type=int, default=0,
                         help='0 : Test du modèle, 1 : prédiction d\'une image')
