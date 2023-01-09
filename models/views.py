@@ -7,11 +7,14 @@ import mock
 from keras.datasets import mnist
 import matplotlib.pyplot as plt
 from random import randint
+from .forms import ImageForm
+
 
 
 (X_train, Y_train), (X_test, Y_test) = mnist.load_data()
 
-
+cm=[]
+acc=0
 def index(request):
     template = loader.get_template('templates/home.html')
     context = {}
@@ -40,17 +43,21 @@ def trainingcnn(request):
     args = mock.Mock()
     args.type=2
     args.model="CNNtrained.h5"
-    
+    global cm
+    global acc
     cm,acc=test(args)
     context = {
         'cm':cm,
         'acc':acc,
         'nc':len(cm),
         'type':0,
-        'model':"classifier_CNN.h5",
+        'model':args.model,
         'id':randint(0,9999),
         'pred':-1,
-        'imag':False
+        'imag':False,
+        'form':ImageForm(),
+        'impath':" ",
+        'upld':False
 
     }
     template = loader.get_template('templates/test_predict.html')
@@ -81,7 +88,8 @@ def trainingauc(request):
     args = mock.Mock()
     args.type=2
     args.model="AUCtrained.h5"
-    
+    global cm
+    global acc
     
     cm,acc=test(args)
     context = {
@@ -89,11 +97,14 @@ def trainingauc(request):
         'acc':acc,
         'nc':len(cm),
         'type':0,
-        'model':"classifier_au.h5",
+        'model':args.model,
         'image':False,
         'id':randint(0,9999),
         'pred':-1,
-        'imag':False
+        'imag':False,
+        'form':ImageForm(),
+        'impath':" ",
+        'upld':False
     }
     template = loader.get_template('templates/test_predict.html')
     
@@ -105,7 +116,8 @@ def trainingauc(request):
 def predcnn(request):    
     args = mock.Mock()
     args.type=0
-    
+    global cm
+    global acc
     
     cm,acc=test(args)
     context = {
@@ -117,7 +129,10 @@ def predcnn(request):
         'image':False,
         'id':randint(0,9999),
         'pred':-1,
-        'imag':False
+        'imag':False,
+        'form':ImageForm(),
+        'impath':" ",
+        'upld':False
     }
     template = loader.get_template('templates/test_predict.html')
 
@@ -127,9 +142,12 @@ def predcnn(request):
 def predauc(request):    
     args = mock.Mock()
     args.type=1
-    
+    global cm
+    global acc
+
     
     cm,acc=test(args)
+
     context = {
         'cm':cm,
         'acc':acc,
@@ -139,7 +157,10 @@ def predauc(request):
         'image':False,
         'id':randint(0,9999),
         'pred':-1,
-        'imag':False
+        'imag':False,
+        'form':ImageForm(),
+        'impath':" ",
+        'upld':False
     }
     template = loader.get_template('templates/test_predict.html')
 
@@ -151,7 +172,8 @@ def predauctrain(request):
     args = mock.Mock()
     args.type=2
     args.model="AUCtrained.h5"
-    
+    global cm
+    global acc
     
     cm,acc=test(args)
     context = {
@@ -163,7 +185,10 @@ def predauctrain(request):
         'image':False,
         'id':randint(0,9999),
         'pred':-1,
-        'imag':False
+        'imag':False,
+        'form':ImageForm(),
+        'impath':" ",
+        'upld':False
     }
     template = loader.get_template('templates/test_predict.html')
 
@@ -173,7 +198,8 @@ def predcnntrain(request):
     args = mock.Mock()
     args.type=2
     args.model="CNNtrained.h5"
-    
+    global cm
+    global acc
     cm,acc=test(args)
     context = {
         'cm':cm,
@@ -183,7 +209,10 @@ def predcnntrain(request):
         'image':False,
         'id':randint(0,9999),
         'pred':-1,
-        'imag':False
+        'imag':False,
+        'form':ImageForm(),
+        'impath':" ",
+        'upld':False
     }
     template = loader.get_template('templates/test_predict.html')
 
@@ -196,8 +225,9 @@ def predictimage(request):
     args = mock.Mock()
     args.type=int(request.GET['type'])+2
     args.model=model
-    cm,acc=test(args)
-    
+    #cm,acc=test(args)
+    global cm
+    global acc
     args.input=X_test[id]
     print("please")
     print(args.input)
@@ -213,12 +243,56 @@ def predictimage(request):
         'image':True,
         'id':randint(0,9999),
         'pred':prediction,
-        'imag':True
+        'imag':True,
+        'form':ImageForm(),
+        'impath':" ",
+        'upld':False
     }
+
     cmap = plt.cm.jet
     norm = plt.Normalize(vmin=X_test[id].min(), vmax=X_test[id].max())
     image = cmap(norm(X_test[id]))
 
     plt.imsave('./models/static/image.png', X_test[id], cmap=cmap)
+    template = loader.get_template('templates/test_predict.html')
+    return HttpResponse(template.render(context, request))
+
+def uploadimage(request):
+    
+    if request.method == 'POST':
+        form = ImageForm(request.POST, request.FILES)
+        if form.is_valid():
+            img_obj = form.instance
+            print(img_obj)
+        else :
+            return loader.get_template('templates/home.html')
+    model=(request.POST['model'])
+    print(img_obj.image)
+    print(img_obj.image.url)
+    args = mock.Mock()
+    args.type=int(request.POST['type'])+2
+    args.model=model
+    #cm,acc=test(args)
+    global cm
+    global acc
+    args.input=img_obj.image
+    args.array=True
+    prediction=predict(args)
+    
+    context = {
+        'cm':cm,
+        'acc':acc,
+        'type':args.type,
+        'model':args.model,
+        'image':True,
+        'id':randint(0,9999),
+        'pred':prediction,
+        'imag':False,
+        'form':ImageForm(),
+        'impath':img_obj.image.url,
+        'upld':True
+    }
+
+
     template = loader.get_template('templates/test_predict.html')
     return HttpResponse(template.render(context, request))

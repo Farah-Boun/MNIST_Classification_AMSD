@@ -4,6 +4,7 @@ import numpy as np
 from sklearn.metrics import confusion_matrix,accuracy_score
 import keras
 from keras.datasets import mnist
+from PIL import Image
 
 
 def parse_args():
@@ -38,11 +39,11 @@ def predict(args):
     if(args.array==False):
         input_arr = args.input
     else:
-        image = keras.utils.load_img(args.input)
-        input_arr = keras.utils.img_to_array(image)
-        input_arr = np.array([input_arr])
+        img = Image.open(args.input).convert('L')
+        input_arr = np.array(img).reshape(1,28,28,1)
 
     if(type%2==1):
+        input_arr = np.array(img).reshape(1,28,28,1)
         predictions = model.predict(input_arr/255)
     else:
         input_arr=input_arr.reshape(1,28,28,1)

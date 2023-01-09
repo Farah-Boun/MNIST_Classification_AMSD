@@ -47,6 +47,16 @@ div {
 h3{
   color: white;
 }
+
+
+input::file-selector-button {
+    font-weight: bold;
+    color: dodgerblue;
+    padding: 0.5em;
+    border: thin solid grey;
+    border-radius: 3px;
+}
+
 </style>
 <body class="body"> 
 
@@ -55,7 +65,7 @@ h3{
 <div>
   <form action="/training-cnn">
     <label for="fname">Number of epochs</label>
-    <input type="number" step="1" id="epochs" name="epochs" value=25>
+    <input type="number" step="1" id="epochs" name="epochs" value=5>
     <label for="fname">Learning rate</label>
     <input type="number" step="1" id="lr" name="lr" value=0.001>
     <label for="fname">Optimier (0 : ADAM, 1 : SGD)</label>
