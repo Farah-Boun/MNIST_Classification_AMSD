@@ -1,0 +1,298 @@
+{% load static %}
+
+{% block includes %}
+{{ nc }}
+{{ cm }}
+{{ acc }}
+{{pred}}
+{{id}}
+{{imag}}
+{{ form}}
+{{impath}}
+{{upld}}
+{% endblock includes %}
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  input[type=text], select {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid black;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  input[type=number], select {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid black;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  
+  button {
+    width: 100%;
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  button {
+    background-color: #45a049;
+  }
+  label{
+    color: black;
+  }
+  
+  div {
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 20px;
+  }
+  h3{
+    color: black;
+  }
+  </style>
+<style>
+body {
+  font-family: Arial;
+  color: black;
+}
+td{
+  text-align: center;
+}
+
+.btn {
+  background-color: #e7e7e7; /* Green */
+  border: none;
+  color: black;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+a {
+  background-color: #e7e7e7; /* Green */
+  border: none;
+  color: black;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+
+.split {
+  height: 100%;
+  width: 50%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  overflow-x: hidden;
+  padding-top: 20px;
+}
+
+.left {
+  left: 0;
+  background-color: #111;
+}
+
+.right {
+  right: 0;
+  background-color: white;
+}
+
+.centered {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.centered img {
+  width: 150px;
+}
+</style>
+</head>
+<body>
+
+<div class="split left">
+  <a href="/">Home</a>
+  <div class="centered">
+    <h2>Accuracy</h2>    
+    <p>{{ acc }} %</p>
+    <h2>Confusion Matrix</h2>    
+    <table>
+      <tr> 
+          <td>{{ cm.0.0 }}</td>
+          <td>{{ cm.0.1 }}</td>
+          <td>{{ cm.0.2 }}</td>
+          <td>{{ cm.0.3 }}</td>
+          <td>{{ cm.0.4 }}</td>
+          <td>{{ cm.0.5 }}</td>
+          <td>{{ cm.0.6 }}</td>
+          <td>{{ cm.0.7 }}</td>
+          <td>{{ cm.0.8 }}</td>
+          <td>{{ cm.0.9 }}</td>
+      </tr>
+      <tr> 
+        <td>{{ cm.1.0 }}</td>
+        <td>{{ cm.1.1 }}</td>
+        <td>{{ cm.1.2 }}</td>
+        <td>{{ cm.1.3 }}</td>
+        <td>{{ cm.1.4 }}</td>
+        <td>{{ cm.1.5 }}</td>
+        <td>{{ cm.1.6 }}</td>
+        <td>{{ cm.1.7 }}</td>
+        <td>{{ cm.1.8 }}</td>
+        <td>{{ cm.1.9 }}</td>
+    </tr>
+    <tr> 
+      <td>{{ cm.2.0 }}</td>
+      <td>{{ cm.2.1 }}</td>
+      <td>{{ cm.2.2 }}</td>
+      <td>{{ cm.2.3 }}</td>
+      <td>{{ cm.2.4 }}</td>
+      <td>{{ cm.2.5 }}</td>
+      <td>{{ cm.2.6 }}</td>
+      <td>{{ cm.2.7 }}</td>
+      <td>{{ cm.2.8 }}</td>
+      <td>{{ cm.2.9 }}</td>
+  </tr>
+  <tr> 
+    <td>{{ cm.3.0 }}</td>
+    <td>{{ cm.3.1 }}</td>
+    <td>{{ cm.3.2 }}</td>
+    <td>{{ cm.3.3 }}</td>
+    <td>{{ cm.3.4 }}</td>
+    <td>{{ cm.3.5 }}</td>
+    <td>{{ cm.3.6 }}</td>
+    <td>{{ cm.3.7 }}</td>
+    <td>{{ cm.3.8 }}</td>
+    <td>{{ cm.3.9 }}</td>
+</tr>
+<tr> 
+  <td>{{ cm.4.0 }}</td>
+  <td>{{ cm.4.1 }}</td>
+  <td>{{ cm.4.2 }}</td>
+  <td>{{ cm.4.3 }}</td>
+  <td>{{ cm.4.4 }}</td>
+  <td>{{ cm.4.5 }}</td>
+  <td>{{ cm.4.6 }}</td>
+  <td>{{ cm.4.7 }}</td>
+  <td>{{ cm.4.8 }}</td>
+  <td>{{ cm.4.9 }}</td>
+</tr>
+<tr> 
+  <td>{{ cm.5.0 }}</td>
+  <td>{{ cm.5.1 }}</td>
+  <td>{{ cm.5.2 }}</td>
+  <td>{{ cm.5.3 }}</td>
+  <td>{{ cm.5.4 }}</td>
+  <td>{{ cm.5.5 }}</td>
+  <td>{{ cm.5.6 }}</td>
+  <td>{{ cm.5.7 }}</td>
+  <td>{{ cm.5.8 }}</td>
+  <td>{{ cm.5.9 }}</td>
+</tr>
+<tr> 
+  <td>{{ cm.6.0 }}</td>
+  <td>{{ cm.6.1 }}</td>
+  <td>{{ cm.6.2 }}</td>
+  <td>{{ cm.6.3 }}</td>
+  <td>{{ cm.6.4 }}</td>
+  <td>{{ cm.6.5 }}</td>
+  <td>{{ cm.6.6 }}</td>
+  <td>{{ cm.6.7 }}</td>
+  <td>{{ cm.6.8 }}</td>
+  <td>{{ cm.6.9 }}</td>
+</tr>
+<tr> 
+  <td>{{ cm.7.0 }}</td>
+  <td>{{ cm.7.1 }}</td>
+  <td>{{ cm.7.2 }}</td>
+  <td>{{ cm.7.3 }}</td>
+  <td>{{ cm.7.4 }}</td>
+  <td>{{ cm.7.5 }}</td>
+  <td>{{ cm.7.6 }}</td>
+  <td>{{ cm.7.7 }}</td>
+  <td>{{ cm.7.8 }}</td>
+  <td>{{ cm.7.9 }}</td>
+</tr>
+<tr> 
+  <td>{{ cm.8.0 }}</td>
+  <td>{{ cm.8.1 }}</td>
+  <td>{{ cm.8.2 }}</td>
+  <td>{{ cm.8.3 }}</td>
+  <td>{{ cm.8.4 }}</td>
+  <td>{{ cm.8.5 }}</td>
+  <td>{{ cm.8.6 }}</td>
+  <td>{{ cm.8.7 }}</td>
+  <td>{{ cm.8.8 }}</td>
+  <td>{{ cm.8.9 }}</td>
+</tr>
+<tr> 
+  <td>{{ cm.9.0 }}</td>
+  <td>{{ cm.9.1 }}</td>
+  <td>{{ cm.9.2 }}</td>
+  <td>{{ cm.9.3 }}</td>
+  <td>{{ cm.9.4 }}</td>
+  <td>{{ cm.9.5 }}</td>
+  <td>{{ cm.9.6 }}</td>
+  <td>{{ cm.9.7 }}</td>
+  <td>{{ cm.9.8 }}</td>
+  <td>{{ cm.9.9 }}</td>
+</tr>
+</table>
+
+  </div>
+</div>
+
+<div class="split right">
+  <div class="centered">
+    <h3>AUC parameters</h3>
+
+<div>
+  <form action="/predict-image">
+    <label for="fname">Select id of an image to test (0 to 9999)</label>
+    <input type="number" step="1" id="imid" name="imid" value={{id}} aria-valuemin="0" aria-valuemax="9999">
+    <button onClick="btnClick()" id="submit" type="submit">Predict</button>
+    <input type="hidden" type="text" id="type" name="type" value="{{type}}">
+    <input type="hidden" type="text" id="model" name="model" value="{{model}}">
+  </form>
+  <br><br>
+
+
+  <form method="post" action="/upload-image" enctype="multipart/form-data">
+    <label for="avatar">Or upload a mnist image :</label><br><br>
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button id="submit" type="submit">Predict</button>
+       <br>    
+    <input type="hidden" type="text" id="type" name="type" value="{{type}}">
+    <input type="hidden" type="text" id="model" name="model" value="{{model}}">
+  </form>
+  </div>
+  {% if imag %}
+  <img src="{% static 'image.png' %}" alt="img">
+  <h2>{{pred}}</h2>
+  {% endif %}
+
+  {% if upld %}
+  <img src="{{ impath}}"  alt="img">
+  <h2>{{pred}}</h2>
+  {% endif %}
+</div>
+     
+</body>
+</html> 

@@ -4,6 +4,7 @@ import numpy as np
 from sklearn.metrics import confusion_matrix,accuracy_score
 import keras
 from keras.datasets import mnist
+from PIL import Image
 
 
 def parse_args():
@@ -32,17 +33,20 @@ def predict(args):
         model = keras.models.load_model("classifier_CNN.h5")
     elif(type==1):
         model = keras.models.load_model("classifier_au.h5")
-        autoenc=keras.models.load_model("encoder.h5")
     else:
         model = keras.models.load_model(args.model)
     
-    image = keras.utils.load_img(args.model)
-    input_arr = keras.utils.img_to_array(image)
-    input_arr = np.array([input_arr])
-    if(type==1):
-        encoded=autoenc.predict(input_arr)
-        predictions = model.predict(encoded)
+    if(args.array==False):
+        input_arr = args.input
     else:
+        img = Image.open(args.input).convert('L')
+        input_arr = np.array(img).reshape(1,28,28,1)
+
+    if(type%2==1):
+        input_arr = np.array(img).reshape(1,28,28,1)
+        predictions = model.predict(input_arr/255)
+    else:
+        input_arr=input_arr.reshape(1,28,28,1)
         predictions = model.predict(input_arr)
     pred=np.argmax(predictions)#, axis=1)
     return pred
@@ -52,23 +56,22 @@ def test(args):
     (x_train, y_train), (x_test, y_test) = mnist.load_data()
     type= int(args.type)
     if(type==0):
-        model = keras.models.load_model("CNN.h5")
-    elif(type==1):
         model = keras.models.load_model("classifier_CNN.h5")
-        autoenc=keras.models.load_model("encoder.h5")
+    elif(type==1):
+        model = keras.models.load_model("classifier_au.h5")
     else:
         model = keras.models.load_model(args.model)
     if(type==1):
-        encoded=autoenc.predict(x_test)
-        Y_hat = model.predict(encoded)
+        Y_hat = model.predict(x_test/255)
     else:
         Y_hat = model.predict(x_test)
     Y_pred = np.argmax(Y_hat, axis=1)
     cm = confusion_matrix(y_test, Y_pred)
     print(cm)
-    print("Accuracy : "+str(accuracy_score(y_test, Y_pred)))
+    acc=accuracy_score(y_test, Y_pred)
+    print("Accuracy : "+str(acc))
 
-    return 
+    return cm,acc
 
 if __name__ == "__main__":
     args = parse_args()
