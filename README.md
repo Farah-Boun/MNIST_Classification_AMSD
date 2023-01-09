@@ -1,10 +1,25 @@
 # MNIST_Classification_AMSD
-Un CNN qui classifie des chiffres manuscrit, entrainé sur le dataset MNIST
+Une web app Django qui permet d'entrainer, de tester et de faire des prédictions sur le dataset de chiffres manuscrits MNIST à l'aide de deux modèles. Le premier modèle étant un CNN 2D et le deuxieme un autoencodeur.
 
-Ce modèle est implémenté avec le framework Keras. C'est un CNN 2D de 4 couches de convolution, avec des couches de Batch Normalisation et de Dropout et une couche de classification entièrement connectée. Nous allons par la suite diviser ces taches entre nous.
+## Lancer l'application sans docker
+* installer les packages nécessaires
 
-- Data Preprocessing: Normalisation et augmentation des données. Plusieurs techniques à tester
-- Entrainement & Evaluation: Entrainer le modèle en modifiant les hyper paramètres. Tester le modèle sur plusieurs métriques
-- Prediction: prédire sur des images en entrée à partir d'un modèle déjà entrainé
+```
+pip install -r requirements.txt
+```
 
-Eventuellement, on pourra changer la structure du modèle pour l'améliorer selon les résultats de l'evaluation.
+* Lancer l'application 
+```
+python .\manage.py runserver
+```
+Ouvrir `localhost:8000` sur votre navigateur web pour ouvrir l'application.
+
+## Lancer l'application avec Docker
+* Builder une image
+```
+docker build -t nom_contenaire .
+```
+* Lancer l'application
+```
+docker run -it -p 8000:8000 -v /path/to/MNIST_Classification_AMSD:/code nom_contenaire
+```
