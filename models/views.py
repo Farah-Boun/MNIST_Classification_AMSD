@@ -5,6 +5,8 @@ from main import train_cnn,train_autoencoder,train_classifier
 from predict import test, predict
 import mock
 from keras.datasets import mnist
+import matplotlib.pyplot as plt
+from random import randint
 
 
 (X_train, Y_train), (X_test, Y_test) = mnist.load_data()
@@ -46,7 +48,10 @@ def trainingcnn(request):
         'nc':len(cm),
         'type':0,
         'model':"classifier_CNN.h5",
-        'i':0
+        'id':randint(0,9999),
+        'pred':-1,
+        'imag':False
+
     }
     template = loader.get_template('templates/test_predict.html')
     return HttpResponse(template.render(context, request))
@@ -86,8 +91,9 @@ def trainingauc(request):
         'type':0,
         'model':"classifier_au.h5",
         'image':False,
-        'id':0,
-        'pred':-1
+        'id':randint(0,9999),
+        'pred':-1,
+        'imag':False
     }
     template = loader.get_template('templates/test_predict.html')
     
@@ -109,8 +115,9 @@ def predcnn(request):
         'type':0,
         'model':"classifier_CNN.h5",
         'image':False,
-        'id':0,
-        'pred':-1
+        'id':randint(0,9999),
+        'pred':-1,
+        'imag':False
     }
     template = loader.get_template('templates/test_predict.html')
 
@@ -130,8 +137,9 @@ def predauc(request):
         'type':0,
         'model':"classifier_au.h5",
         'image':False,
-        'id':0,
-        'pred':-1
+        'id':randint(0,9999),
+        'pred':-1,
+        'imag':False
     }
     template = loader.get_template('templates/test_predict.html')
 
@@ -153,8 +161,9 @@ def predauctrain(request):
         'type':0,
         'model':"classifier_au.h5",
         'image':False,
-        'id':0,
-        'pred':-1
+        'id':randint(0,9999),
+        'pred':-1,
+        'imag':False
     }
     template = loader.get_template('templates/test_predict.html')
 
@@ -172,8 +181,9 @@ def predcnntrain(request):
         'type':0,
         'model':"classifier_CNN.h5",
         'image':False,
-        'id':0,
-        'pred':-1
+        'id':randint(0,9999),
+        'pred':-1,
+        'imag':False
     }
     template = loader.get_template('templates/test_predict.html')
 
@@ -201,8 +211,14 @@ def predictimage(request):
         'type':args.type,
         'model':args.model,
         'image':True,
-        'id':id,
-        'pred':prediction
+        'id':randint(0,9999),
+        'pred':prediction,
+        'imag':True
     }
+    cmap = plt.cm.jet
+    norm = plt.Normalize(vmin=X_test[id].min(), vmax=X_test[id].max())
+    image = cmap(norm(X_test[id]))
+
+    plt.imsave('./models/static/image.png', X_test[id], cmap=cmap)
     template = loader.get_template('templates/test_predict.html')
     return HttpResponse(template.render(context, request))

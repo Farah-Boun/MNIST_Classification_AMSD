@@ -4,7 +4,8 @@
 {{ cm }}
 {{ acc }}
 {{pred}}
-
+{{id}}
+{{imag}}
 
 
 {% endblock includes %}
@@ -108,7 +109,6 @@ td{
 
 .centered img {
   width: 150px;
-  border-radius: 50%;
 }
 </style>
 </head>
@@ -252,13 +252,16 @@ td{
 <div>
   <form action="/predict-image">
     <label for="fname">Select id of an image to test (0 to 9999)</label>
-    <input type="number" step="1" id="imid" name="imid" value=0 aria-valuemin="0" aria-valuemax="9999">
+    <input type="number" step="1" id="imid" name="imid" value={{id}} aria-valuemin="0" aria-valuemax="9999">
     <button onClick="btnClick()" id="submit" type="submit">Predict</button>
     <input type="hidden" type="text" id="type" name="type" value="{{type}}">
     <input type="hidden" type="text" id="model" name="model" value="{{model}}">
   </form>
   </div>
+  {% if imag %}
+  <img src="{% static 'image.png' %}" alt="img">
   <h2>{{pred}}</h2>
+  {% endif %}
 </div>
      
 </body>

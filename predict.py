@@ -43,11 +43,9 @@ def predict(args):
         input_arr = np.array([input_arr])
 
     if(type%2==1):
-        print("auc")
-
         predictions = model.predict(input_arr/255)
     else:
-        print("cnn")
+        input_arr=input_arr.reshape(1,28,28,1)
         predictions = model.predict(input_arr)
     pred=np.argmax(predictions)#, axis=1)
     return pred
