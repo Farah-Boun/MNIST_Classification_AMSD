@@ -11,7 +11,8 @@ from random import randint
 
 (X_train, Y_train), (X_test, Y_test) = mnist.load_data()
 
-
+cm=[]
+acc=0
 def index(request):
     template = loader.get_template('templates/home.html')
     context = {}
@@ -40,14 +41,15 @@ def trainingcnn(request):
     args = mock.Mock()
     args.type=2
     args.model="CNNtrained.h5"
-    
+    global cm
+    global acc
     cm,acc=test(args)
     context = {
         'cm':cm,
         'acc':acc,
         'nc':len(cm),
         'type':0,
-        'model':"classifier_CNN.h5",
+        'model':args.model,
         'id':randint(0,9999),
         'pred':-1,
         'imag':False
@@ -81,7 +83,8 @@ def trainingauc(request):
     args = mock.Mock()
     args.type=2
     args.model="AUCtrained.h5"
-    
+    global cm
+    global acc
     
     cm,acc=test(args)
     context = {
@@ -89,7 +92,7 @@ def trainingauc(request):
         'acc':acc,
         'nc':len(cm),
         'type':0,
-        'model':"classifier_au.h5",
+        'model':args.model,
         'image':False,
         'id':randint(0,9999),
         'pred':-1,
@@ -105,7 +108,8 @@ def trainingauc(request):
 def predcnn(request):    
     args = mock.Mock()
     args.type=0
-    
+    global cm
+    global acc
     
     cm,acc=test(args)
     context = {
@@ -127,9 +131,12 @@ def predcnn(request):
 def predauc(request):    
     args = mock.Mock()
     args.type=1
-    
+    global cm
+    global acc
+
     
     cm,acc=test(args)
+
     context = {
         'cm':cm,
         'acc':acc,
@@ -151,7 +158,8 @@ def predauctrain(request):
     args = mock.Mock()
     args.type=2
     args.model="AUCtrained.h5"
-    
+    global cm
+    global acc
     
     cm,acc=test(args)
     context = {
@@ -173,7 +181,8 @@ def predcnntrain(request):
     args = mock.Mock()
     args.type=2
     args.model="CNNtrained.h5"
-    
+    global cm
+    global acc
     cm,acc=test(args)
     context = {
         'cm':cm,
@@ -196,8 +205,9 @@ def predictimage(request):
     args = mock.Mock()
     args.type=int(request.GET['type'])+2
     args.model=model
-    cm,acc=test(args)
-    
+    #cm,acc=test(args)
+    global cm
+    global acc
     args.input=X_test[id]
     print("please")
     print(args.input)
@@ -215,6 +225,7 @@ def predictimage(request):
         'pred':prediction,
         'imag':True
     }
+    
     cmap = plt.cm.jet
     norm = plt.Normalize(vmin=X_test[id].min(), vmax=X_test[id].max())
     image = cmap(norm(X_test[id]))
