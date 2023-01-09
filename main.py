@@ -94,7 +94,7 @@ def train_autoencoder(optimizer, epochs, lr, steps):
     opt = keras.optimizers.Adam(learning_rate=lr)
 
   autoencoder.compile(optimizer=opt, loss='binary_crossentropy', metrics=["accuracy"])
-  hist = autoencoder.fit_generator(dataGen().flow(X_train2, X_train3),
+  hist = autoencoder.fit_generator(dataGen(noise_type=None).flow(X_train2, X_train3),
                             steps_per_epoch=steps,            
                             epochs=epochs,                       
                             verbose=1,                        
@@ -121,7 +121,7 @@ def train_classifier(autoencoder, optimizer, epochs, lr, steps):
 
   model.compile(loss='categorical_crossentropy', optimizer = opt, metrics=["accuracy"])
 
-  hist = model.fit_generator(dataGen().flow(X_train, Y_train, batch_size=32),
+  hist = model.fit_generator(dataGen(noise_type=None).flow(X_train, Y_train, batch_size=32),
                             steps_per_epoch=steps,             
                             epochs=epochs,                       
                             verbose=1,                       
@@ -148,7 +148,7 @@ def train_cnn(optimizer, epochs, lr, steps):
 
   model.compile(loss='categorical_crossentropy', optimizer = opt, metrics=["accuracy"])
 
-  hist = model.fit_generator(dataGen().flow(X_train, Y_train, batch_size=32),
+  hist = model.fit_generator(dataGen(noise_type=None).flow(X_train, Y_train, batch_size=32),
                             steps_per_epoch=steps,           
                             epochs=epochs,                       
                             verbose=1,                      

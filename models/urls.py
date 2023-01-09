@@ -10,5 +10,6 @@ urlpatterns = [
     path('pred-auc', views.predauc, name='pred-auc'),
     path('training-cnn', views.trainingcnn, name='training-cnn'),
     path('training-auc', views.trainingauc, name='training-auc'),
+    path('predict-image', views.predictimage, name='predict-image'),
 
 ]

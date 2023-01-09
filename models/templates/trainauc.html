@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<style>
+input[type=text], select {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+input[type=number], select {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+button {
+  width: 100%;
+  background-color: #4CAF50;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button {
+  background-color: #45a049;
+}
+
+div {
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  padding: 20px;
+}
+.body{
+  background-color: #111;
+}
+
+h3{
+  color: white;
+}
+</style>
+<body class="body"> 
+
+<h3>AUC parameters</h3>
+
+<div>
+  <form action="/training-cnn">
+    <label for="fname">Number of epochs</label>
+    <input type="number" step="1" id="epochs" name="epochs" value=25>
+    <label for="fname">Learning rate</label>
+    <input type="number" step="1" id="lr" name="lr" value=0.001>
+    <label for="fname">Optimier (0 : ADAM, 1 : SGD)</label>
+    <input type="number" step="1" id="opt" name="opt" value=0>
+    <label for="fname">Steps by epoch (max 1500)</label>
+    <input type="number" step="1" id="step" name="step" value=1000>
+    
+    <label for="fname">AUC's number of epochs </label>
+    <input type="number" step="1" id="aucepochs" name="aucepochs" value=25>
+    <label for="fname">AUC's learning rate</label>
+    <input type="number" step="1" id="auclr" name="auclr" value=0.001>
+    <label for="fname">AUC's Optimier (0 : ADAM, 1 : SGD)</label>
+    <input type="number" step="1" id="aucopt" name="aucopt" value=0>
+    <label for="fname">AUC's steps by epoch (max 1500)</label>
+    <input type="number" step="1" id="aucstep" name="aucstep" value=1000>
+
+
+    <button onClick="btnClick()" id="submit" type="submit">Start training</button>
+    <label id="training">Training may take some time. It will redirect you to evaluate page when done.</label>
+
+  </form>
+</div>
+
+</body>
+<script> 
+  function btnClick(){ 
+    fetch("[host]/index",{method:’GET’}) 
+    .then((data)=>{ 
+    console.log(data.text) 
+  }) 
+  } 
+  </script> 
+</html>
+
+

@@ -32,17 +32,22 @@ def predict(args):
         model = keras.models.load_model("classifier_CNN.h5")
     elif(type==1):
         model = keras.models.load_model("classifier_au.h5")
-        autoenc=keras.models.load_model("encoder.h5")
     else:
         model = keras.models.load_model(args.model)
     
-    image = keras.utils.load_img(args.model)
-    input_arr = keras.utils.img_to_array(image)
-    input_arr = np.array([input_arr])
-    if(type==1):
-        encoded=autoenc.predict(input_arr)
-        predictions = model.predict(encoded)
+    if(args.array==False):
+        input_arr = args.input
     else:
+        image = keras.utils.load_img(args.input)
+        input_arr = keras.utils.img_to_array(image)
+        input_arr = np.array([input_arr])
+
+    if(type%2==1):
+        print("auc")
+
+        predictions = model.predict(input_arr/255)
+    else:
+        print("cnn")
         predictions = model.predict(input_arr)
     pred=np.argmax(predictions)#, axis=1)
     return pred
@@ -52,23 +57,22 @@ def test(args):
     (x_train, y_train), (x_test, y_test) = mnist.load_data()
     type= int(args.type)
     if(type==0):
-        model = keras.models.load_model("CNN.h5")
-    elif(type==1):
         model = keras.models.load_model("classifier_CNN.h5")
-        autoenc=keras.models.load_model("encoder.h5")
+    elif(type==1):
+        model = keras.models.load_model("classifier_au.h5")
     else:
         model = keras.models.load_model(args.model)
     if(type==1):
-        encoded=autoenc.predict(x_test)
-        Y_hat = model.predict(encoded)
+        Y_hat = model.predict(x_test/255)
     else:
         Y_hat = model.predict(x_test)
     Y_pred = np.argmax(Y_hat, axis=1)
     cm = confusion_matrix(y_test, Y_pred)
     print(cm)
-    print("Accuracy : "+str(accuracy_score(y_test, Y_pred)))
+    acc=accuracy_score(y_test, Y_pred)
+    print("Accuracy : "+str(acc))
 
-    return 
+    return cm,acc
 
 if __name__ == "__main__":
     args = parse_args()
