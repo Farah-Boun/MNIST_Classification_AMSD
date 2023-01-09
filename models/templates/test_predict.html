@@ -1,4 +1,5 @@
 {% load static %}
+
 {% block includes %}
 {{ nc }}
 {{ cm }}
@@ -6,8 +7,9 @@
 {{pred}}
 {{id}}
 {{imag}}
-
-
+{{ form}}
+{{impath}}
+{{upld}}
 {% endblock includes %}
 <html>
 <head>
@@ -268,9 +270,26 @@ a {
     <input type="hidden" type="text" id="type" name="type" value="{{type}}">
     <input type="hidden" type="text" id="model" name="model" value="{{model}}">
   </form>
+  <br><br>
+
+
+  <form method="post" action="/upload-image" enctype="multipart/form-data">
+    <label for="avatar">Or upload a mnist image :</label><br><br>
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button id="submit" type="submit">Predict</button>
+       <br>    
+    <input type="hidden" type="text" id="type" name="type" value="{{type}}">
+    <input type="hidden" type="text" id="model" name="model" value="{{model}}">
+  </form>
   </div>
   {% if imag %}
   <img src="{% static 'image.png' %}" alt="img">
+  <h2>{{pred}}</h2>
+  {% endif %}
+
+  {% if upld %}
+  <img src="{{ impath}}"  alt="img">
   <h2>{{pred}}</h2>
   {% endif %}
 </div>

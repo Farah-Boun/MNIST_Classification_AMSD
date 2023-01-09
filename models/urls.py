@@ -11,5 +11,5 @@ urlpatterns = [
     path('training-cnn', views.trainingcnn, name='training-cnn'),
     path('training-auc', views.trainingauc, name='training-auc'),
     path('predict-image', views.predictimage, name='predict-image'),
-
+    path('upload-image', views.uploadimage, name='upload-image'),
 ]
